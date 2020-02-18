@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="Dashboard">
+    <meta name="keyword" content="Dashboard, Bootstrap, Admin, Template, Theme, Responsive, Fluid, Retina">
+    <title>学生成长分析平台</title>
+
+    <!-- Favicons -->
+    <link href="/templates/servermaterial/img/favicon.png" rel="icon">
+    <link href="/templates/servermaterial/img/apple-touch-icon.png" rel="apple-touch-icon">
+
+    <!-- Bootstrap core CSS -->
+    <link href="/templates/servermaterial/lib/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <!--external css-->
+    <link href="/templates/servermaterial/lib/font-awesome/css/font-awesome.css" rel="stylesheet" />
+
+    <link rel="stylesheet" href="/templates/servermaterial/lib/advanced-datatable/css/DT_bootstrap.css" />
+    <link href="/templates/servermaterial/lib/advanced-datatable/css/jquery.dataTables.css" rel="stylesheet" />
+    <!-- Custom styles for this template -->
+    <link href="/templates/servermaterial/css/style.css" rel="stylesheet">
+    <link href="/templates/servermaterial/css/style-responsive.css" rel="stylesheet">
+
+    <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+	<script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+	<script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script>
+
+$(document).ready(function () {
+
+    $.ajax({
+        url: '/web/monitor_engine/',
+        type: 'POST',
+        data: {'grade__': $("#grade__").val()},
+        // dataType: 'JSON',
+        // contentType: 'application/json;charset=utf-8',
+        success: function (result) {
+            draw_jcbjg(result);
+            draw_ycbjg(result);
+            draw_jcst(result);
+
+
+        }
+
+    });
+
+
+    $("#grade__").change(function () {
+        $.ajax({
+            url: '/web/monitor_engine/',
+            type: 'POST',
+            data: {'grade__': $("#grade__").val()},
+            // dataType: 'JSON',
+            // contentType: 'application/json;charset=utf-8',
+            success: function (result) {
+                draw_jcbjg(result);
+				draw_ycbjg(result);
+				draw_jcst(result);
+
+
+            }
+
+        });
+    });
+
+
+
+});
+
+
+//监测不及格
+function draw_jcbjg(data) {
+    var myChart = echarts.init(document.getElementById('chart-1'));
+    // alert('here');
+	option = {
+		// title: {
+		// 		text: '监测不及格情况'
+		// 	},
+        // textStyle: {//主标题文本样式{"fontSize": 18,"fontWeight": "bolder","color": "#333"}
+        //     fontFamily: 'Arial, Verdana, sans...',
+        //     fontSize: 12,
+        //     fontStyle: 'normal',
+        //     fontWeight: 'normal'
+        // },
+		legend: {},
+		tooltip: {},
+		dataset: {
+			source: [
+				['cat', '语文不及格人数', '数学不及格人数', '英语不及格人数','总人数'],
+				data['cha1']
+			]
+		},
+		xAxis: {type: 'category'},
+		yAxis: {},
+		// Declare several bar series, each will be mapped
+		// to a column of dataset.source by default.
+		series: [
+			{type: 'bar'},
+			{type: 'bar'},
+			{type: 'bar'},
+			{type: 'bar'}
+		]
+	};
+    // 使用刚指定的配置项和数据显示图表。
+    myChart.setOption(option);
+}
+
+//预测不及格
+function draw_ycbjg(data) {
+    var myChart = echarts.init(document.getElementById('chart-2'));
+    // alert('here');
+	option = {
+		// title: {
+		// 		text: '预测不及格情况'
+		// 	},
+		legend: {},
+		tooltip: {},
+		dataset: {
+			source: [
+				['cat', '语文不及格人数', '数学不及格人数', '英语不及格人数','总人数'],
+				data['cha2']
+			]
+		},
+		xAxis: {type: 'category'},
+		yAxis: {},
+		// Declare several bar series, each will be mapped
+		// to a column of dataset.source by default.
+		series: [
+			{type: 'bar'},
+			{type: 'bar'},
+			{type: 'bar'},
+			{type: 'bar'}
+		]
+	};
+    // 使用刚指定的配置项和数据显示图表。
+    myChart.setOption(option);
+}
+
+//身体健康监测
+function draw_jcst(dat) {
+    var myChart = echarts.init(document.getElementById('chart-3'));
+
+    option = {
+        // title: {
+        //     text: '监测身体综合素质',
+        //     x:'center'
+        // },
+        // toolbox: {
+        //     feature: {
+        //         dataView: {show: true, readOnly: false},
+        //         restore: {show: true},
+        //         saveAsImage: {show: true}
+        //     }
+        // },
+        tooltip : {
+            trigger: 'item',
+            formatter: "{a} <br/>{b} : {c} ({d}%)"
+        },
+        legend: {
+            orient: 'vertical',
+            left: 'left',
+            data: ['身体综合素质不合格','身体健康']
+        },
+        series : [
+            {
+                name: '人数',
+                type: 'pie',
+                radius : '55%',
+                center: ['50%', '60%'],
+                data:dat['cha3'],
+
+                itemStyle: {
+                    emphasis: {
+                        shadowBlur: 10,
+                        shadowOffsetX: 0,
+                        shadowColor: 'rgba(0, 0, 0, 0.5)'
+                    }
+                }
+            }
+        ]
+    };
+
+    // 使用刚指定的配置项和数据显示图表。
+    myChart.setOption(option);
+}
+
+
+
+
+    </script>
+    <!-- =======================================================
+        Template Name: Dashio
+        Template URL: https://templatemag.com/dashio-bootstrap-admin-template/
+        Author: TemplateMag.com
+        License: https://templatemag.com/license/
+    ======================================================= -->
+  </head>
+  <body>
+    <!-- **********************************************************************************************************************************************************
+      TOP BAR CONTENT & NOTIFICATIONS
+      *********************************************************************************************************************************************************** -->
+    <!--header start-->
+    {% include 'servermaterial/header.html' %}
+    <!--header end-->
+
+    <!--sidebar start-->
+    {% include 'servermaterial/sidebar.html' %}
+    <!--sidebar end-->
+
+    <!-- **********************************************************************************************************************************************************
+    MAIN CONTENT
+    *********************************************************************************************************************************************************** -->
+    <!--main content start-->
+    <section id="main-content">
+      <section class="wrapper site-min-height">
+        <div class="col-lg-12 mt">
+          <div class="row content-panel">
+                <div class="col-lg-12 detailed mt">
+                    <h4>可视化选项</h4>
+                    <div>
+                        <div class="cls form-group col-lg-4">
+                            <label class="col-lg-3 control-label text-info"
+                                   style="font-size: 17px; margin-top: 5px"><strong>年级</strong></label>
+                            <div class="col-lg-8">
+                                <select class="form-control" id="grade__">
+                                    <option value="11">一年级</option>
+                                    <option value="12">二年级</option>
+                                    <option value="13">三年级</option>
+                                    <option value="14">四年级</option>
+                                    <option value="15">五年级</option>
+                                    <option value="16">六年级</option>
+                                    <option value="17">七年级</option>
+                                    <option value="18">八年级</option>
+                                    <option value="19">九年级</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group col-lg-6">
+                            <button class="btn btn-theme" id="inquirybtnn" type="button" onclick="charts()">查询</button>
+                        </div>
+                    </div>
+                </div>
+          </div>
+        </div>
+
+
+        <div class="col-lg-12 detailed">
+          <div class="row content-panel">
+            <h4>监测不及格情况</h4>
+
+                  <div class="row mt">
+                    <div class="col-lg-5 col-lg-offset-4 detailed">
+                      <div id="chart-1" style="width: 450px;height:400px;"></div>
+                      <a href="/web/list1" target="_blank">查看不及格学生信息</a>
+                    </div>
+
+                  </div>
+
+
+
+          </div>
+
+        </div>
+
+       <div class="col-lg-12 detailed">
+          <div class="row content-panel">
+            <h4>预测不及格情况</h4>
+
+                  <div class="row mt">
+                    <div class="col-lg-5 col-lg-offset-4 detailed">
+                      <div id="chart-2" style="width: 450px;height:400px;"></div>
+                      <a href="/web/list2"  target="_blank">查看预计不及格学生信息</a>
+                    </div>
+
+                  </div>
+
+
+
+          </div>
+
+        </div>
+
+       <div class="col-lg-12 detailed">
+          <div class="row content-panel">
+            <h4>监测身体综合素质</h4>
+
+                  <div class="row mt">
+                    <div class="col-lg-5 col-lg-offset-4 detailed">
+                      <div id="chart-3" style="width: 450px;height:400px;"></div>
+                        <a href="/web/list3" target="_blank">查看身体综合素质不合格学生信息</a>
+                    </div>
+                  </div>
+
+
+
+          </div>
+        </div>
+
+
+         <div class="col-lg-12 detailed">
+          <div class="row content-panel">
+
+
+
+
+          </div>
+        </div>
+       <div class="col-lg-12 detailed">
+          <div class="row content-panel">
+
+
+
+
+          </div>
+        </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+      </section>
+      <!-- /wrapper -->
+    </section>
+    <!-- /MAIN CONTENT -->
+    <!--main content end-->
+
+    <!--footer start-->
+    {% include 'servermaterial/footer.html' %}
+    <!--footer end-->
+
+    <!-- js placed at the end of the document so the pages load faster -->
+
+    <!--<script type="text/javascript" language="javascript" src="/templates/servermaterial/lib/advanced-datatable/js/jquery.js"></script>-->
+    <!--<script src="/templates/servermaterial/lib/bootstrap/js/bootstrap.min.js"></script>-->
+
+
+    <!--common script for all pages-->
+    <script src="/templates/servermaterial/lib/common-scripts.js"></script>
+    <!--script for this page-->
+
+    <script type="text/javascript" src="/templates/servermaterial/lib/bootstrap-fileupload/bootstrap-fileupload.js"></script>
+    <script type="text/javascript" src="/templates/servermaterial/lib/bootstrap-datepicker/js/bootstrap-datepicker.js"></script>
+    <script type="text/javascript" src="/templates/servermaterial/lib/bootstrap-daterangepicker/date.js"></script>
+    <script type="text/javascript" src="/templates/servermaterial/lib/bootstrap-daterangepicker/daterangepicker.js"></script>
+    <script type="text/javascript" src="/templates/servermaterial/lib/bootstrap-datetimepicker/js/bootstrap-datetimepicker.js"></script>
+    <script type="text/javascript" src="/templates/servermaterial/lib/bootstrap-daterangepicker/moment.min.js"></script>
+    <script type="text/javascript" src="/templates/servermaterial/lib/bootstrap-timepicker/js/bootstrap-timepicker.js"></script>
+
+    <!--script for this page-->
+    <script src="/templates/servermaterial/lib/morris-conf.js"></script>
+    <script src="/templates/servermaterial/lib/morris/morris.min.js"></script>
+    <script src="/templates/servermaterial/lib/raphael/raphael.min.js"></script>
+    <!--script for charts-->
+
+    <script type="text/javascript" language="javascript" src="https://cdn.datatables.net/1.10.18/js/jquery.dataTables.min.js"></script>
+    <!--<script src="/templates/servermaterial/lib/echarts.js"></script>-->
+    <!--<script src="/templates/servermaterial/lib/wordcloud.js"></script>-->
+    <script src="/templates/servermaterial/lib/echarts.min.js"></script>
+    <script src="/templates/servermaterial/js/echarts-wordcloud.min.js"></script>
+
+
+
+
+
+
+
+
+
+  </body>
+</html>
